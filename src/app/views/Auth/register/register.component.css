@@ -1,0 +1,41 @@
+.container {
+    min-height: 100vh; /* Full viewport height */
+  }
+  
+  .card {
+    max-height: 90%; /* Prevents excessive height */
+    border: none;
+  }
+  
+  .card img {
+    height: 70px;
+    width: 70px;
+  }
+  
+  .card h3 {
+    color: #34c759; /* Matching the theme */
+  }
+  
+  .btn-success {
+    background: #34c759;
+    border: none;
+  }
+  
+  .btn-success:hover {
+    background: #28a745;
+  }
+  
+  .btn-outline-danger {
+    border: 2px solid #db4437;
+    color: #db4437;
+  }
+  
+  .btn-outline-danger:hover {
+    background: #db4437;
+    color: #fff;
+  }
+  
+  hr {
+    margin: 0.5rem 0;
+  }
+  

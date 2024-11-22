@@ -1,0 +1,88 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg" style="width: 26rem; border-radius: 20px;">
+      <div class="card-body p-4">
+        <!-- Logo or Brand Name -->
+        <div class="text-center mb-4">
+          <h3 class="fw-bold text-primary">Create Account</h3>
+          <p class="text-muted">Sign up to get started</p>
+        </div>
+  
+        <!-- Registration Form -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <!-- Full Name Field -->
+          <div class="form-group mb-3">
+            <label for="fullname" class="form-label fw-semibold">Full Name</label>
+            <input
+              type="text"
+              id="fullname"
+              class="form-control"
+              formControlName="fullname"
+              placeholder="Enter your full name"
+            />
+            <small *ngIf="f['fullname']?.invalid && f['fullname']?.touched" class="text-danger">
+              Full name is required.
+            </small>
+          </div>
+  
+          <!-- Email Field -->
+          <div class="form-group mb-3">
+            <label for="email" class="form-label fw-semibold">Email</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              formControlName="email"
+              placeholder="Enter your email"
+            />
+            <small *ngIf="f['email']?.invalid && f['email']?.touched" class="text-danger">
+              Please enter a valid email.
+            </small>
+          </div>
+  
+          <!-- Password Field -->
+          <div class="form-group mb-3">
+            <label for="password" class="form-label fw-semibold">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              formControlName="password"
+              placeholder="Create a password"
+            />
+            <small *ngIf="f['password']?.invalid && f['password']?.touched" class="text-danger">
+              Password is required (min. 6 characters).
+            </small>
+          </div>
+  
+          <!-- Sign-Up Button -->
+          <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-primary fw-semibold" [disabled]="registerForm.invalid">
+              Sign Up
+            </button>
+          </div>
+  
+          <!-- Google Authentication Button -->
+          <div class="d-grid">
+            <button type="button" class="btn btn-outline-danger fw-semibold">
+              <i class="bi bi-google me-2"></i> Sign up with Google
+            </button>
+          </div>
+  
+          <!-- Divider -->
+          <div class="text-center my-3">
+            <hr class="text-muted">
+            <span class="text-muted px-2">OR</span>
+            <hr class="text-muted">
+          </div>
+  
+          <!-- Already have an account -->
+          <div class="text-center">
+            <small class="text-muted">
+              Already have an account? <a routerLink="../login" class="fw-semibold text-primary">Login</a>
+            </small>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

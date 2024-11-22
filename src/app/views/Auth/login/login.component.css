@@ -1,0 +1,42 @@
+.container {
+    /* background: linear-gradient(to right, #6a11cb, #2575fc); */
+    min-height: 100vh; /* Ensure full viewport height */
+  }
+  
+  .card {
+    max-height: 70%; /* Prevents excessive height */
+    border: none;
+  }
+  
+  .card img {
+    height: 70px;
+    width: 70px;
+  }
+  
+  .card h3 {
+    color: #6a11cb;
+  }
+  
+  .btn-primary {
+    background: #6a11cb;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background: #563d7c;
+  }
+  
+  .btn-outline-danger {
+    border: 2px solid #db4437;
+    color: #db4437;
+  }
+  
+  .btn-outline-danger:hover {
+    background: #db4437;
+    color: #fff;
+  }
+  
+  hr {
+    margin: 0.5rem 0;
+  }
+  
