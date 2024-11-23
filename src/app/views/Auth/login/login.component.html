@@ -56,10 +56,11 @@
   
           <!-- Google Authentication Button -->
           <div class="d-grid">
-            <button type="button" class="btn btn-outline-danger fw-semibold">
+            <button (click)="signInWithGoogle()" type="button" class="btn btn-outline-danger fw-semibold">
               <i class="bi bi-google me-2"></i> Sign in with Google
             </button>
           </div>
+          <button id="gBtn"></button>
         </form>
   
         <!-- Divider -->
