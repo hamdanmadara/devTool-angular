@@ -4,6 +4,8 @@ import { Meta, Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/_services/Auth/auth.service';
 import { SocialSignInService } from 'src/app/shared/_services/SocialSignIn/social-sign-in.service';
+import { SocialAuthService,GoogleLoginProvider } from "angularx-social-login";
+
 declare const google: any;
 @Component({
   selector: 'app-login',
@@ -15,8 +17,8 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   avail: boolean=false;
   msg: string='';
-
-  constructor(private fb: FormBuilder,private router: Router,
+  latestClientId= '497303743191-j40sbqdb39nlfho2h89g0rbkt9ecogod.apps.googleusercontent.com'
+  constructor(private fb: FormBuilder,private router: Router,private socialAuthService: SocialAuthService,
     private auth: AuthService,private socialSIgnIn: SocialSignInService) {
     // Initialize the form with validation rules
     this.loginForm = this.fb.group({
@@ -62,73 +64,121 @@ export class LoginComponent implements OnInit {
   // }
 
   ngOnInit(): void {
-    this.socialSIgnIn.initializeGoogleAuth().then(() => {
-      console.log('Google Auth initialized');
-    });
+    // google.accounts.id.initialize({
+    //   client_id: this.latestClientId,
+    //   callback: this.handleCredentialResponse
+    // });
+    // google.accounts.id.renderButton(
+    //   document.getElementById("buttonDiv"),
+    //   { theme: "outline", size: "large" }  // customization attributes
+    // );
+    // google.accounts.id.prompt(); // also display the One Tap dialog
+    // this.socialSIgnIn.initializeGoogleAuth().then(() => {
+    //   console.log('Google Auth initialized');
+    // });
+    // this.socialAuthService.authState.subscribe((user) => {
+    //   if (user) {
+    //     console.log('User is authenticated:', user);
+    //   } else {
+    //     console.log('User is not authenticated');
+    //   }
+    // });
   }
+
 
   // ngAfterViewInit(){
   //   this.initializeGoogleSignIn();
 
   // }
-  signInWithGoogle(): void {
-    this.socialSIgnIn
-      .googleSignIn()
-      .then((response:any) => {
-        console.log('Login success:', response);
-      })
-      .catch((error:any) => {
-        console.error('Login error:', error);
-      });
-  }
+  // initializeGoogleSignIn() {
+  //   // debugger
+  //   google.accounts.id.initialize({
+  //     client_id: this.latestClientId,
+  //     callback: this.handleCredentialResponse.bind(this)
+  //   });
+    
+  //   google.accounts.id.prompt(); 
+  // }
 
+  // triggerGoogleSignIn() {
+  //   google.accounts.id.prompt((notification: any) => {
+  //     if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+  //       // Try manual rendering
+  //       google.accounts.id.renderButton(
+  //         document.getElementById("googleLoginButton"),
+  //         { theme: "outline", size: "large", text: "continue_with" }
+  //       );
+  //     }
+  //   });
+  // }
+  // handleCredentialResponse(response: any) {
+  //   this.auth.googleLogin(response.credential).subscribe(
+  //     (res) => {
+  //       if (res.isNewUser) {
+  //         // Handle new user registration
+  //         console.log('New user registered via Google');
+  //       } else {
+  //         // Handle existing user login
+  //         console.log('Existing user logged in via Google');
+  //       }
+  //         const redirectUrl = '/signup'
+  //         const defaultRedirectUrl = '/user';
+  
+  //         // Use the router's navigateByUrl method to navigate and reload the page
+  //         this.router.navigateByUrl(redirectUrl || defaultRedirectUrl).then(() => {
+  //           window.location.reload();
+  //         });
+  //       }
+  //     ,
+  //     (error) => {
+  //       console.error('Google authentication failed', error);
+  //       this.avail = true;
+  //       this.msg = 'Google authentication failed. Please try again.';
+  //     }
+  //   );
+  // }
+
+  onGoogleSignIn() {
+    console.log(this.socialAuthService);  // Check if this is properly instantiated
+    // if (this.socialAuthService._initState.isStopped) {
+    //   console.error('Login providers not ready yet');
+    //   return;
+    // }
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user) => {
+      console.log('Google Sign-In successful', user);
+      if (user && user.idToken) {
+        this.auth.googleSignInUsingFirebase(user.idToken).subscribe(
+          (res) => {
+            console.log('Google response', res);
+          },
+          (err) => {
+            console.log('Error during Firebase sign-in:', err);
+          }
+        );
+      } else {
+        console.error('User or idToken is missing');
+      }
+    }).catch((error) => {
+      console.error('Google sign-in failed:', error);
+    });
+  }
+  
+  handleCredentialResponse(response: any) {
+    console.log("Response as JSON:", JSON.stringify(response, null, 2));
+    
+  }
 
   initializeGoogleSignIn() {
-    // debugger
     google.accounts.id.initialize({
-      client_id: '497303743191-v23hp6hs508m8sgeerbhc7k83aj1ij0g.apps.googleusercontent.com',
+      client_id: this.latestClientId,
       callback: this.handleCredentialResponse.bind(this)
     });
-    
-    google.accounts.id.prompt(); 
-  }
 
-  triggerGoogleSignIn() {
-    google.accounts.id.prompt((notification: any) => {
-      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-        // Try manual rendering
-        google.accounts.id.renderButton(
-          document.getElementById("googleLoginButton"),
-          { theme: "outline", size: "large", text: "continue_with" }
-        );
-      }
-    });
-  }
-  handleCredentialResponse(response: any) {
-    this.auth.googleLogin(response.credential).subscribe(
-      (res) => {
-        if (res.isNewUser) {
-          // Handle new user registration
-          console.log('New user registered via Google');
-        } else {
-          // Handle existing user login
-          console.log('Existing user logged in via Google');
-        }
-          const redirectUrl = ''
-          const defaultRedirectUrl = '/user';
-  
-          // Use the router's navigateByUrl method to navigate and reload the page
-          this.router.navigateByUrl(redirectUrl || defaultRedirectUrl).then(() => {
-            window.location.reload();
-          });
-        }
-      ,
-      (error) => {
-        console.error('Google authentication failed', error);
-        this.avail = true;
-        this.msg = 'Google authentication failed. Please try again.';
-      }
+    google.accounts.id.renderButton(
+      document.getElementById('google-sign-in-button'),
+      { theme: 'outline', size: 'large' }
     );
-  }
 
-}
+    google.accounts.id.prompt(); // Prompt the user to sign in
+  }
+}  

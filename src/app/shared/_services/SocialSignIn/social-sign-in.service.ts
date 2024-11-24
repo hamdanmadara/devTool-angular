@@ -6,7 +6,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { AuthService } from '../Auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-declare const google:any;
+// declare const google:any;
 declare const gapi: any;
 
 
